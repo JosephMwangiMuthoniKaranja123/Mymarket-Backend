@@ -1,6 +1,7 @@
 // import-db.js
 import fs from "fs";
 import mysql from "mysql2/promise";
+import path from "path";
 
 async function importDatabase() {
   try {

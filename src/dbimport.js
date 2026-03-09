@@ -3,7 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mysql from "mysql2/promise";
 
-// Fix __dirname for ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -15,7 +14,8 @@ async function connectWithRetry(retries = 5, delay = 3000) {
         port: Number(process.env.DB_PORT),
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
+        database: process.env.DB_NAME,
+        multipleStatements: true  // ✅ allow multiple statements
       });
       return connection;
     } catch (err) {
@@ -31,21 +31,17 @@ async function importDatabase() {
     const connection = await connectWithRetry();
     console.log("✅ Connected to the database");
 
-    // Path to the folder containing multiple SQL files
     const folderPath = path.join(__dirname, "config", "schema.sql");
-    const files = fs.readdirSync(folderPath).filter(f => f.endsWith(".sql"));
-
-    // Sort files if needed (e.g., 01_tables.sql → 02_products.sql)
-    files.sort();
+    const files = fs.readdirSync(folderPath).filter(f => f.endsWith(".sql")).sort();
 
     for (const file of files) {
       const filePath = path.join(folderPath, file);
-      const sql = fs.readFileSync(filePath, "utf8");
+      let sql = fs.readFileSync(filePath, "utf8");
 
-      // Optionally, add "IF NOT EXISTS" to avoid duplicate tables
-      const safeSql = sql.replace(/CREATE TABLE (\w+)/gi, "CREATE TABLE IF NOT EXISTS $1");
+      // Remove MySQL dump-specific comments that cause syntax errors
+      sql = sql.replace(/\/\*![\s\S]*?\*\//g, "");
 
-      await connection.query(safeSql);
+      await connection.query(sql);
       console.log(`✅ Imported ${file}`);
     }
 

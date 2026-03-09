@@ -1,38 +1,56 @@
-// import-db.js
 import fs from "fs";
-import mysql from "mysql2/promise";
 import path from "path";
 import { fileURLToPath } from "url";
+import mysql from "mysql2/promise";
 
+// Fix __dirname for ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+async function connectWithRetry(retries = 5, delay = 3000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const connection = await mysql.createConnection({
+        host: process.env.DB_HOST,
+        port: Number(process.env.DB_PORT),
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME
+      });
+      return connection;
+    } catch (err) {
+      console.log(`Connection failed, retrying in ${delay/1000}s... (${i+1}/${retries})`);
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+  throw new Error("Unable to connect to the database after multiple retries");
+}
+
 async function importDatabase() {
   try {
-    // Create connection using Railway variables
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),  // Convert string to number
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
-    });
-
+    const connection = await connectWithRetry();
     console.log("✅ Connected to the database");
 
-    // Read your SQL file
-      const sqlPath = path.join(__dirname, "config", "schema.sql"); 
-    let sql = fs.readFileSync(sqlPath, "utf8");
+    // Path to the folder containing multiple SQL files
+    const folderPath = path.join(__dirname, "config", "schema.sql");
+    const files = fs.readdirSync(folderPath).filter(f => f.endsWith(".sql"));
 
-    // Make tables creation safe: ignore if they already exist
-    sql = sql.replace(/CREATE TABLE (\w+)/gi, "CREATE TABLE IF NOT EXISTS $1");
+    // Sort files if needed (e.g., 01_tables.sql → 02_products.sql)
+    files.sort();
 
-    // Execute the SQL commands
-    await connection.query(sql);
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      const sql = fs.readFileSync(filePath, "utf8");
 
-    console.log("✅ Database imported successfully");
+      // Optionally, add "IF NOT EXISTS" to avoid duplicate tables
+      const safeSql = sql.replace(/CREATE TABLE (\w+)/gi, "CREATE TABLE IF NOT EXISTS $1");
+
+      await connection.query(safeSql);
+      console.log(`✅ Imported ${file}`);
+    }
 
     await connection.end();
+    console.log("✅ All SQL files imported successfully");
     process.exit();
   } catch (err) {
     console.error("❌ Failed to import database:", err.message);
@@ -40,5 +58,4 @@ async function importDatabase() {
   }
 }
 
-// Run the import
 importDatabase();

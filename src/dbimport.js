@@ -16,7 +16,8 @@ async function importDatabase() {
     console.log("✅ Connected to the database");
 
     // Read your SQL file
-    let sql = fs.readFileSync("./config/schema.sql", "utf8");
+      const sqlPath = path.join(__dirname, "config", "schema.sql"); 
+    let sql = fs.readFileSync(sqlPath, "utf8");
 
     // Make tables creation safe: ignore if they already exist
     sql = sql.replace(/CREATE TABLE (\w+)/gi, "CREATE TABLE IF NOT EXISTS $1");

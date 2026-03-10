@@ -16,10 +16,8 @@ export const addproduct=async(req,res)=>{
       const result= await Product.createproduct(connection,{seller_id,title,price,description,primaryimage,category_id,stock});
      
        
-      if (!req.files || req.files.length === 0) {
-  await connection.rollback();
-  return res.status(400).json({ message: "No images uploaded" });
-}
+
+
    const listings_id=result.insertId;
 
       for(let i=0;i<req.files.length;i++){
@@ -29,7 +27,7 @@ export const addproduct=async(req,res)=>{
             "INSERT INTO listing_images (listing_id,image_url,is_primary) VALUES(?,?,?)",
             [listings_id,
             file.path,
-              i ===0 ? true:false  ]
+              i ===0 ? 1:0  ]
         );
       }
 

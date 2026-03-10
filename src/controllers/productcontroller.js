@@ -1,7 +1,9 @@
 import * as Product from "../models/products.js";
 import { db } from "../config/db.js";
 
-
+console.log("req.user:", req.user);
+console.log("req.files:", req.files);
+console.log("req.body:", req.body);
 export const addproduct=async(req,res)=>{
     const connection= await db.getConnection();
     try{

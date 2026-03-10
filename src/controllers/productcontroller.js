@@ -3,9 +3,9 @@ import { db } from "../config/db.js";
 
 
 export const addproduct=async(req,res)=>{
-    console.log("req.user:", req.user);
-console.log("req.files:", req.files);
-console.log("req.body:", req.body);
+console.log("req.user:", JSON.stringify(req.user, null, 2));
+console.log("req.files:", JSON.stringify(req.files, null, 2));
+console.log("req.body:", JSON.stringify(req.body, null, 2));
     const connection= await db.getConnection();
     try{
         await connection.beginTransaction();

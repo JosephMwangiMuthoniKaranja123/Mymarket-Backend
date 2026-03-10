@@ -4,7 +4,7 @@ import { verifytoken } from "../middleware/auths.js";
 import { authorize } from "../middleware/authorize.js";
 import { update } from "../controllers/updateproductcontroller.js";
 import { deleteProduct } from "../controllers/deleteproductcontroller.js";
-import upload from "../middleware/uploads.js";
+import upload from "../config/cloudinary.js";
  
 const router=express.Router();
 router.post("/",verifytoken,authorize("admin","seller","buyer"),upload.array("images",10),addproduct);

@@ -1,15 +1,13 @@
 import multer from "multer";
-import path from "path";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
-const storage= multer.diskStorage({
-    destination:(req,file,cb)=>cb(null,"uploads/"),
-    filename:(req,file,cb)=>cb(null,Date.now() + path.extname(file.originalname))
-});
-const upload=multer({
-    storage,
-    fileFilter:(req,file,cb)=>{
-        if(file.mimetype.startsWith("image/")) cb(null,true);
-        else cb(new Error("only images allowed"));
+const storage=new CloudinaryStorage({
+    cloudinary:cloudinary,
+    params:{
+        folder:"Marketplace_products_images",
+        allowed_formats:["jpg","png","jpeg"]
     }
 });
+const upload= multer({storage});
 export default upload;

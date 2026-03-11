@@ -78,10 +78,7 @@ async function importSQLFiles() {
     // Re-enable foreign key checks
     await connection.query("SET FOREIGN_KEY_CHECKS=1;");
     console.log("🎉 All SQL files imported successfully!");
-    const [rows] = await connection.execute("SELECT DATABASE() AS db_name;");
-    console.log("Currently connected to database:", rows[0].db_name);
-    const [tables] = await connection.execute("SHOW TABLES;");
-console.log("Tables in this database:", tables);
+
   } catch (err) {
     console.error("❌ Failed to import database:", err);
   } finally {

@@ -27,7 +27,7 @@ console.log("req.body:", JSON.stringify(req.body, null, 2));
         const file=req.files[i];
 
         await connection.execute(
-            "INSERT INTO listings_images (listing_id,image_url,is_primary) VALUES(?,?,?)",
+            "INSERT INTO listing_images (listing_id,image_url,is_primary) VALUES(?,?,?)",
             [listings_id,
             file.path,
               i ===0 ? true:false ]

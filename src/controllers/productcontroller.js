@@ -30,7 +30,7 @@ console.log("req.body:", JSON.stringify(req.body, null, 2));
             "INSERT INTO listings_images (listing_id,image_url,is_primary) VALUES(?,?,?)",
             [listings_id,
             file.path,
-              i ===0 ? 1:0  ]
+              i ===0 ? true:false ]
         );
       }
 

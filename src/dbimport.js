@@ -30,7 +30,7 @@ async function importSQLFiles() {
     // Temporarily disable foreign key checks
     await connection.query("SET FOREIGN_KEY_CHECKS=0;");
 
-    const folderPath = path.join(__dirname, "database");
+    const folderPath = path.join(__dirname, "database","schema.sql");
 
     // Check folder exists
     if (!fs.existsSync(folderPath)) {
@@ -56,7 +56,7 @@ async function importSQLFiles() {
       let sql = fs.readFileSync(path.join(folderPath, file), "utf8");
 
       // Remove versioned MySQL comments (/*! ... */)
-      //sql = sql.replace(/\/\*![\s\S]*?\*\//g, "");
+      sql = sql.replace(/\/\*![\s\S]*?\*\//g, "");
 
       // Remove -- line comments
       sql = sql.replace(/^--.*$/gm, "");

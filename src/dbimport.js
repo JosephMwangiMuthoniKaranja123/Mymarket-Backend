@@ -56,7 +56,7 @@ async function importSQLFiles() {
       let sql = fs.readFileSync(path.join(folderPath, file), "utf8");
 
       // Remove versioned MySQL comments (/*! ... */)
-      sql = sql.replace(/\/\*![\s\S]*?\*\//g, "");
+      //sql = sql.replace(/\/\*![\s\S]*?\*\//g, "");
 
       // Remove -- line comments
       sql = sql.replace(/^--.*$/gm, "");

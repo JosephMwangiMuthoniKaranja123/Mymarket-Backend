@@ -26,8 +26,13 @@ async function importSQLFiles() {
     // Temporarily disable foreign key checks
     await connection.query("SET FOREIGN_KEY_CHECKS=0;");
 
-    const folderPath = path.join(__dirname, "config", "schema.sql");
-    let files = fs.readdirSync(folderPath).filter(f => f.endsWith(".sql")).sort();
+  
+const folderPath = path.join(__dirname, "database"); // point to folder
+let files = fs.readdirSync(folderPath)
+              .filter(f => f.endsWith(".sql"))
+              .sort(); // optional: sort if needed
+
+
 
     // Reverse the order to handle dependent tables last
     files = files.reverse();

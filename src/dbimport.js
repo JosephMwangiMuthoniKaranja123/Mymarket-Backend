@@ -72,13 +72,14 @@ async function importSQLFiles() {
       }
 
       console.log(`✅ Imported ${file}`);
-         const [rows] = await connection.execute("SELECT DATABASE() AS db_name;");
-    console.log("Currently connected to database:", rows[0].db_name);
+         
     }
 
     // Re-enable foreign key checks
     await connection.query("SET FOREIGN_KEY_CHECKS=1;");
     console.log("🎉 All SQL files imported successfully!");
+    const [rows] = await connection.execute("SELECT DATABASE() AS db_name;");
+    console.log("Currently connected to database:", rows[0].db_name);
   } catch (err) {
     console.error("❌ Failed to import database:", err);
   } finally {

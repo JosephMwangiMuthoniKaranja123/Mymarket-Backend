@@ -3,11 +3,15 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import mysql from "mysql2/promise";
+import dotenv from "dotenv";
+
+dotenv.config(); // load .env
 
 // Fix __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Connect to MySQL
 async function connect() {
   return mysql.createConnection({
     host: process.env.DB_HOST,
@@ -15,7 +19,7 @@ async function connect() {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    multipleStatements: true
+    multipleStatements: true,
   });
 }
 
@@ -26,15 +30,25 @@ async function importSQLFiles() {
     // Temporarily disable foreign key checks
     await connection.query("SET FOREIGN_KEY_CHECKS=0;");
 
-  
-const folderPath = path.join(__dirname, "database"); // point to folder
-let files = fs.readdirSync(folderPath)
-              .filter(f => f.endsWith(".sql"))
-              .sort(); // optional: sort if needed
+    const folderPath = path.join(__dirname, "database");
 
+    // Check folder exists
+    if (!fs.existsSync(folderPath)) {
+      console.error("❌ Database folder not found:", folderPath);
+      process.exit(1);
+    }
 
+    // Read only .sql files (ignore directories)
+    let files = fs
+      .readdirSync(folderPath)
+      .filter(
+        (f) =>
+          f.endsWith(".sql") &&
+          fs.lstatSync(path.join(folderPath, f)).isFile()
+      )
+      .sort();
 
-    // Reverse the order to handle dependent tables last
+    // Optional: reverse order if needed for dependent tables
     files = files.reverse();
 
     for (const file of files) {
@@ -50,11 +64,11 @@ let files = fs.readdirSync(folderPath)
       // Split statements by semicolon and execute individually
       const statements = sql
         .split(";")
-        .map(s => s.trim())
-        .filter(s => s.length);
+        .map((s) => s.trim())
+        .filter((s) => s.length);
 
       for (const stmt of statements) {
-        await connection.query(stmt);
+        await connection.execute(stmt); // use execute instead of query for safety
       }
 
       console.log(`✅ Imported ${file}`);

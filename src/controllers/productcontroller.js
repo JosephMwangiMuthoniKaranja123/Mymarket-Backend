@@ -26,7 +26,7 @@ console.log("req.body:", JSON.stringify(req.body, null, 2));
       for(let i=0;i<req.files.length;i++){
         const file=req.files[i];
 
-        await connection.query(
+        await connection.execute(
             "INSERT INTO listings_images (listing_id,image_url,is_primary) VALUES(?,?,?)",
             [listings_id,
             file.path,

@@ -72,6 +72,8 @@ async function importSQLFiles() {
       }
 
       console.log(`✅ Imported ${file}`);
+         const [rows] = await connection.execute("SELECT DATABASE() AS db_name;");
+    console.log("Currently connected to database:", rows[0].db_name);
     }
 
     // Re-enable foreign key checks

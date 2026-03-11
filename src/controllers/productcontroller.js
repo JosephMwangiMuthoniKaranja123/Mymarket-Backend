@@ -40,7 +40,12 @@ console.log("req.body:", JSON.stringify(req.body, null, 2));
     }
     catch (err){
        await connection.rollback();
-       return res.status(500).json({error:err.message});
+         console.error("UPLOAD ERROR:", err);
+    return res.status(500).json({
+        error: err.message,
+        code: err.code,
+        sqlMessage: err.sqlMessage
+    });
     }
     finally{
         connection.release();

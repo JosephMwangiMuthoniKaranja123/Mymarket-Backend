@@ -1,5 +1,5 @@
 import { db } from "../config/db.js";
-import { stkPush } from "../models/mpesa.js";
+import { stkpush } from "../models/mpesa.js";
 
 export const checkout = async (req, res) => {
     const user_id = req.user.id;
@@ -43,7 +43,7 @@ export const checkout = async (req, res) => {
         // Only send STK Push if payment method is mpesa
         let response;
         if (paymentmethod === "mpesa") {
-            response = await stkPush(phonenumber, total_price);
+            response = await stkpush(phonenumber, total_price);
 
             // Save CheckoutRequestID for callback processing
             await connection.execute(

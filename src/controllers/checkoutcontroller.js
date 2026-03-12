@@ -2,6 +2,7 @@ import { db } from "../config/db.js";
 
 export const checkout=async (req,res)=>{
     const user_id=req.user.id;
+    const paymentmethod=req.body;
     const connection=await db.getConnection();
 
     await connection.beginTransaction();
@@ -18,8 +19,8 @@ export const checkout=async (req,res)=>{
         const total_price=cartItems.reduce((sum,item)=>sum+item.quantity*item.price,0);
 
         const [orderResult]= await connection.execute(
-            `INSERT INTO purchases (buyer_id,total_price)
-            VALUES(?,?)`,[user_id,total_price]
+            `INSERT INTO purchases (buyer_id,total_price,payment_method)
+            VALUES(?,?)`,[user_id,total_price,paymentmethod]
         );
         const orderid=orderResult.insertId;
 

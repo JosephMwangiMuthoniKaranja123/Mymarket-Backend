@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-async function alterImageUrlColumn() {
+async function alterTable() {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
@@ -14,20 +14,20 @@ async function alterImageUrlColumn() {
   });
 
   try {
-    const tableName = "listings_images"; 
+    const tableName = "purchases"; 
     const sql = `
       ALTER TABLE ${tableName}
-      MODIFY COLUMN image_url VARCHAR(1000) NOT NULL;
+      ADD payment_method VARCHAR(25) NOT NULL DEFAULT 'pay-on-delivery';
     `;
 
     await connection.execute(sql);
-    console.log(`✅ Column 'image_url' in table '${tableName}' successfully altered to VARCHAR(1000).`);
+    console.log("table altered");
   } catch (err) {
-    console.error("❌ Failed to alter column:", err);
+    console.error("❌ Failed to alter table:",err);
   } finally {
     await connection.end();
   }
 }
 
 // Run the script
-alterImageUrlColumn();
+alterTable();

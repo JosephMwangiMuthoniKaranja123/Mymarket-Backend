@@ -22,6 +22,7 @@ const getaccessToken= async ()=>{
 };
 
 export const stkpush= async (phone,amount)=>{
+  try{
     const accesstoken=await getaccessToken();
     const timestamp = moment().format("YYYYMMDDHHmmss");
     const password=Buffer.from(shortcode+passkey+timestamp).toString("base64");
@@ -48,7 +49,13 @@ export const stkpush= async (phone,amount)=>{
   );
 
   return response.data;
-};
+}
+catch(error){
+   console.log("MPESA ERROR:", error.response?.data);
+  throw error;
+}
+}
+
 
 
 

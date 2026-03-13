@@ -17,7 +17,7 @@ async function alterTable() {
     const tableName = "purchases"; 
     const sql = `
       ALTER TABLE ${tableName}
-      ADD payment_status VARCHAR(50) NOT NULL,ADD mpesa_receipt VARCHAR(100) ;
+      ADD checkout_id INT, ADD total_price INT ;
     `;
 
     await connection.execute(sql);

@@ -36,7 +36,7 @@ export const stkpush= async (phone,amount)=>{
       PartyA: phone,
       PartyB: shortcode,
       PhoneNumber: phone,
-      CallBackURL: "https://yourbackend.com/mpesa/callback",
+      CallBackURL: "https://mymarket-backend-production.up.railway.app/api/mpesa/callback",
       AccountReference: "Marketplace",
       TransactionDesc: "Order payment"
     },

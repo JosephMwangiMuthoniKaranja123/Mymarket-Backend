@@ -22,7 +22,7 @@ const getaccessToken= async ()=>{
 };
 
 export const stkpush= async (phone,amount)=>{
-    const accesstoken=getaccessToken();
+    const accesstoken=await getaccessToken();
     const timestamp = moment().format("YYYYMMDDHHmmss");
     const password=Buffer.from(shortcode+passkey+timestamp).toString("base64");
 

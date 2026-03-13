@@ -67,7 +67,11 @@ export const checkout = async (req, res) => {
 
     } catch (error) {
         await connection.rollback();
-        return res.status(500).json({ error: error.message });
+        console.error("Checkout error:", error);
+        return res.status(500).json( { message: "Checkout failed",
+      error: error.message,
+      mysql_error: error.sqlMessage || null,
+      code: error.code || null});
     } finally {
         await connection.release();
     }

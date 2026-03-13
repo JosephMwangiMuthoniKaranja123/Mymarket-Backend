@@ -49,7 +49,7 @@ export const stkpush = async (phone, amount) => {
         Password: password,
         Timestamp: timestamp,
         TransactionType: "CustomerPayBillOnline",
-        Amount: amount,
+        Amount: 10,
         PartyA: testPhone,
         PartyB: shortcode,
         PhoneNumber: testPhone,

@@ -34,6 +34,7 @@ export const stkpush = async (phone, amount) => {
   try {
     // Use async/await correctly for access token
     const accessToken = await getAccessToken();
+    console.log("ACCESS TOKEN:", accessToken);
 
     // Correct timestamp and password
     const timestamp = moment().format("YYYYMMDDHHmmss");
@@ -66,8 +67,7 @@ export const stkpush = async (phone, amount) => {
     );
 
    
-    const accesstoken = await getaccessToken();
-console.log("ACCESS TOKEN:", accesstoken);
+    
  console.log("MPESA RESPONSE:", response.data);
     return response.data;
 

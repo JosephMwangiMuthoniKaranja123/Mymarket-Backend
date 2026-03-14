@@ -51,9 +51,9 @@ export const stkpush = async (phone, amount) => {
         Timestamp: timestamp,
         TransactionType: "CustomerPayBillOnline",
         Amount: 10,
-        PartyA: "254708374154",
+        PartyA: "254708374149",
         PartyB: shortcode,
-        PhoneNumber: "254708374154",
+        PhoneNumber: "254708374149",
         CallBackURL: "https://mymarket-backend-production.up.railway.app/api/mpesa/callback",
         AccountReference: "Marketplace",
         TransactionDesc: "Order payment"

@@ -65,7 +65,10 @@ export const stkpush = async (phone, amount) => {
       }
     );
 
-    console.log("MPESA RESPONSE:", response.data);
+   
+    const accesstoken = await getaccessToken();
+console.log("ACCESS TOKEN:", accesstoken);
+ console.log("MPESA RESPONSE:", response.data);
     return response.data;
 
   } catch (error) {

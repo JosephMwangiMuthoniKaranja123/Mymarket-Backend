@@ -39,6 +39,9 @@ export const stkpush = async (phone, amount) => {
     // Correct timestamp and password
     const timestamp = moment().format("YYYYMMDDHHmmss");
     const password = Buffer.from(shortcode+passkey+timestamp).toString("base64");
+    console.log("Timestamp:", timestamp);
+console.log("Password string:", shortcode + passkey + timestamp);
+console.log("Base64 Password:", password);
 
     // Use sandbox test number if testing
     const testPhone = phone.startsWith("2547") ? phone : "254708374149";

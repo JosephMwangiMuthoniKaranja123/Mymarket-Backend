@@ -9,7 +9,7 @@ import upload from "../middleware/uploads.js";
 const router=express.Router();
 router.post("/",verifytoken,authorize("admin","seller","buyer"),upload.array("images",10),addproduct);
 router.get("/",listproducts);
-router.put("productbyid/:id",verifytoken,authorize("admin","seller","buyer"),update);
+router.put("/:id",verifytoken,authorize("admin","seller","buyer"),update);
 router.delete("/:id",verifytoken,authorize("admin","seller"),deleteProduct);
 router.get("/:id",verifytoken,getpbycategoryid);
 router.get("productbyid/:id",verifytoken,getproductbyId);

@@ -3,7 +3,7 @@ import { updateproduct,getproductbyid } from "../models/updateproduct.js";
 export const update= async (req,res)=>{
     try{
     const listings_id=req.params.id;
-    const {title,price,image,description,category_id}=req.body;
+    const {title,price,description,stock}=req.body;
     
 
     const rows= await getproductbyid(listings_id);
@@ -12,7 +12,7 @@ export const update= async (req,res)=>{
     const product=rows[0];
 
     if(product.seller_id!==req.user.id) return res.status(403).json({message:"You can only update your own product"});
-    await updateproduct({listings_id,title,price,image,description,category_id});
+    await updateproduct({listings_id,title,price,description,stock});
     
    return res.status(200).json({message:"Product updated successfully"});
     

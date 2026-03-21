@@ -1,10 +1,10 @@
 import { db } from "../config/db.js";
 
 export const updateproduct=async (product)=>{
-    const {listings_id,title,price,description,image,category_id}=product;
+    const {listings_id,title,price,description,stock}=product;
     const sql =`UPDATE listings
-    SET   title=?, price=? ,description=?,image=?,category_id=? WHERE id=?`;
-    const [result]= await db.execute(sql,[title,price,description,image,category_id,listings_id]);
+    SET   title=?, price=? ,description=?,stock=? WHERE id=?`;
+    const [result]= await db.execute(sql,[title,price,description,stock,listings_id]);
     return result;
 };
 export const getproductbyid= async (productid)=>{

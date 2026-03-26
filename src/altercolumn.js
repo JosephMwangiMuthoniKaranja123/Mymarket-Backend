@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-async function addTable() {
+async function alterTable() {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
@@ -14,16 +14,10 @@ async function addTable() {
   });
 
   try {
-  const sql=`CREATE TABLE services (
-  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-   username VARCHAR(50),
- userid INT,
-description VARCHAR(200),
-profilepicurl VARCHAR(200),
-FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
- )`;
-
-    await connection.execute(sql);
+  const sql=`ALTER TABLE services
+  DROP column username`;
+  
+  await connection.execute(sql);
     console.log("table altered");
   } catch (err) {
     console.error("❌ Failed to alter table:",err);
@@ -33,4 +27,4 @@ FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
 }
 
 // Run the script
-addTable();
+alterTable();

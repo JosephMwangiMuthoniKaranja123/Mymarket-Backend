@@ -9,6 +9,7 @@ import cartRoutes from "./routes/cartroutes.js";
 import checkoutRoutes from "./routes/checkoutroutes.js";
 import searchRoutes from "./routes/searchroutes.js";
 import callbackRoutes from "./routes/callbackroutes.js";
+import serviceroutes from "./routes/serviceroutes.js"
 
 const app = express();
 const PORT=process.env.PORT || 8080;
@@ -24,6 +25,7 @@ app.use("/api/cart",cartRoutes);
 app.use("/api/checkout",checkoutRoutes);
 app.use("/api/search",searchRoutes);
 app.use("/api",callbackRoutes);
+app.use("/api/services",serviceroutes);
 
 app.get("/", (req, res) => {
   res.send("Backend API running");
